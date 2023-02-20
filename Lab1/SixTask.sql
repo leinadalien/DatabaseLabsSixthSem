@@ -11,9 +11,9 @@ BEGIN
 
     EXCEPTION
         WHEN incorrect THEN
-            RETURN NULL;
+            RETURN 0;
         WHEN INVALID_NUMBER THEN
-            RETURN NULL;
+            RETURN 0;
         WHEN VALUE_ERROR THEN
-            RETURN NULL;
+            RETURN 0;
 END;
