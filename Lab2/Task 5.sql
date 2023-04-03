@@ -24,4 +24,5 @@ BEGIN
             END;
         END CASE;
     END LOOP;
+    DELETE FROM students_log WHERE LOG_TIME > TIME - OFFSET_SECONDS / 86400;
 END;
