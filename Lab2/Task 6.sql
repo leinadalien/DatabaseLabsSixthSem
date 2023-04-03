@@ -1,0 +1,25 @@
+CREATE OR REPLACE TRIGGER C_VAL_COUNTER
+AFTER INSERT OR UPDATE OR DELETE ON STUDENTS
+FOR EACH ROW
+BEGIN
+    CASE
+        WHEN INSERTING THEN BEGIN
+            UPDATE GROUPS SET
+            C_VAL = C_VAL + 1
+            WHERE ID = :NEW.GROUP_ID;
+        END;
+        WHEN UPDATING THEN BEGIN
+            UPDATE GROUPS SET
+            C_VAL = C_VAL - 1
+            WHERE ID = :OLD.GROUP_ID;
+            UPDATE GROUPS SET
+            C_VAL = C_VAL + 1
+            WHERE ID = :NEW.GROUP_ID;
+        END;
+        WHEN DELETING THEN BEGIN
+            UPDATE GROUPS SET
+            C_VAL = C_VAL - 1
+            WHERE ID = :OLD.GROUP_ID;
+        END;
+    END CASE;
+END;
