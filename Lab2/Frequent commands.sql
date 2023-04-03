@@ -2,3 +2,9 @@ SELECT * FROM students_log;
 SELECT * FROM students;
 SELECT * FROM groups;
 UPDATE students SET NAME = 'Alex' WHERE NAME = 'Owen';
+
+BEGIN
+    ROLL_BACK(TO_TIMESTAMP('03.04.23 06:55:00'));
+END;
+
+DELETE FROM STUDENTS WHERE ID > 24;
