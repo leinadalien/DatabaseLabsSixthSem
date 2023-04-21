@@ -38,12 +38,15 @@ BEGIN
                 WHERE owner = dev_schema_name
                     AND table_name = dev_table.table_name;
             ELSE -- TABLE EXISTS
-                FOR dev_column IN (
-                SELECT column_name, data_type
-                FROM all_tab_columns
-                WHERE owner = dev_schema_name
-                    AND table_name = dev_table.table_name
-                ORDER BY column_id) LOOP
+                DECLARE
+                    CURSOR dev_columns IS 
+                        SELECT column_name, data_type
+                        FROM all_tab_columns
+                        WHERE owner = dev_schema_name
+                            AND table_name = dev_table.table_name
+                        ORDER BY column_id;
+                BEGIN
+                FOR dev_column IN dev_columns LOOP
                     DECLARE
                         prod_column_exists INTEGER := 0;
                         prod_column_data_type VARCHAR2(30);
@@ -53,7 +56,8 @@ BEGIN
                         FROM all_tab_columns
                         WHERE owner = prod_schema_name
                             AND table_name = dev_table.table_name
-                            AND column_name = dev_column.column_name;
+                            AND column_name = dev_column.column_name
+                        GROUP BY data_type;
                         IF prod_column_exists = 0 THEN -- COLUMN DOES NOT EXIST
                             INSERT INTO temp_table_diff
                             VALUES (dev_table.table_name,
@@ -68,6 +72,7 @@ BEGIN
                         END IF;
                     END;
                 END LOOP;
+                END;
             END IF;
         END;
     END LOOP;
@@ -146,6 +151,5 @@ BEGIN
     END LOOP;
 
     DELETE FROM temp_table_diff;
-    --DELETE FROM temp_prod_columns;
 END;
     
