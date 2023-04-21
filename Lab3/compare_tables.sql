@@ -29,7 +29,7 @@ BEGIN
                                       res2.column_name || ' ' || res2.data_type || ';';
                         INSERT INTO DDL_TABLE (TABLE_NAME, DDL_SCRIPT, "TYPE")
                         VALUES (diff.TABLE_NAME, ddl_script, 'TABLE');
-                        DBMS_OUTPUT.PUT_LINE(ddl_script);
+                        --DBMS_OUTPUT.PUT_LINE(ddl_script);
                     END LOOP;
             ELSE
                 ddl_script :=
@@ -37,7 +37,7 @@ BEGIN
                             dev_schema_name || '.' || diff.table_name || ');';
                 INSERT INTO DDL_TABLE (TABLE_NAME, DDL_SCRIPT, "TYPE")
                 VALUES (diff.TABLE_NAME, ddl_script, 'TABLE');
-                DBMS_OUTPUT.PUT_LINE(ddl_script);
+                --DBMS_OUTPUT.PUT_LINE(ddl_script);
             END IF;
         END LOOP;
 END;
@@ -75,7 +75,7 @@ BEGIN
                               ' CASCADE CONSTRAINTS;';
                 INSERT INTO DDL_TABLE (TABLE_NAME, DDL_SCRIPT, "TYPE")
                 VALUES (diff.TABLE_NAME, ddl_script, 'TABLE');
-                DBMS_OUTPUT.PUT_LINE(ddl_script);
+                --DBMS_OUTPUT.PUT_LINE(ddl_script);
             ELSE
                 FOR res2 IN (SELECT column_name
                              FROM all_tab_columns
@@ -90,7 +90,7 @@ BEGIN
                                       ' DROP COLUMN ' || res2.column_name || ';';
                         INSERT INTO DDL_TABLE (TABLE_NAME, DDL_SCRIPT, "TYPE")
                         VALUES (diff.TABLE_NAME, ddl_script, 'TABLE');
-                        DBMS_OUTPUT.PUT_LINE(ddl_script);
+                        --DBMS_OUTPUT.PUT_LINE(ddl_script);
                     END LOOP;
             END IF;
         END LOOP;

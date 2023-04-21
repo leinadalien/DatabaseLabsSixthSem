@@ -5,7 +5,7 @@ BEGIN
     EXECUTE IMMEDIATE 'TRUNCATE TABLE DDL_TABLE';
     PROD_CREATE_LIST(dev_schema_name, prod_schema_name);
     PROD_DELETE_LIST(dev_schema_name, prod_schema_name);
-    GET_TABLES_ORDER(dev_schema_name);
+    TABLES_ORDER(dev_schema_name);
 
     FOR script IN (SELECT DDL_SCRIPT
                    FROM DDL_TABLE
