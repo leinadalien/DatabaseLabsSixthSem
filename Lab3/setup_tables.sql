@@ -1,6 +1,3 @@
-CREATE USER dev_schema IDENTIFIED BY dev_schema;
-CREATE USER prod_schema IDENTIFIED BY prod_schema;
-
 CREATE TABLE dev_schema.employees; (
    employee_id NUMBER(10) PRIMARY KEY,
    first_name VARCHAR2(50) NOT NULL,
@@ -15,14 +12,7 @@ CREATE TABLE dev_schema.employees; (
    department_id NUMBER(10)
 );
 
-ALTER TABLE dev_schema.employees
-ADD (
-    middle_name VARCHAR2(50),
-    gender CHAR(1),
-    birth_date DATE,
-    marital_status VARCHAR2(10),
-    nationality VARCHAR2(50)
-);
+
 
 CREATE TABLE dev_schema.departments (
    department_id NUMBER(10) PRIMARY KEY,
@@ -34,13 +24,13 @@ CREATE TABLE dev_schema.departments (
 );
 
 
-SET serveroutput ON
-BEGIN
-    compare_schemas3('DEV_SCHEMA', 'PROD_SCHEMA');
-END;
 
-SELECT column_name, data_type
-                    FROM all_tab_columns
-                    WHERE owner = 'DEV_SCHEMA'
-                        AND table_name = 'EMPLOYEES'
-                    ORDER BY column_id;
+
+ALTER TABLE dev_schema.employees
+ADD (
+    middle_name VARCHAR2(50),
+    gender CHAR(1),
+    birth_date DATE,
+    marital_status VARCHAR2(10),
+    nationality VARCHAR2(50)
+);

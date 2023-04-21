@@ -15,10 +15,7 @@ CREATE OR REPLACE PROCEDURE compare_schemas(
         SELECT table_name
         FROM all_tables
         WHERE owner = prod_schema_name;
-    --temp_table_name VARCHAR2(30) := 'temp_table_diff';
 BEGIN
-    
-    
     FOR dev_table IN dev_tables_cursor LOOP
         DECLARE
             prod_table_exists INTEGER := 0;
@@ -48,29 +45,29 @@ BEGIN
                 BEGIN
                 FOR dev_column IN dev_columns LOOP
                     DECLARE
-                        prod_column_exists INTEGER := 0;
                         prod_column_data_type VARCHAR2(30);
                     BEGIN
-                        SELECT COUNT(*), data_type
-                        INTO prod_column_exists, prod_column_data_type
+                        SELECT data_type
+                        INTO prod_column_data_type
                         FROM all_tab_columns
                         WHERE owner = prod_schema_name
                             AND table_name = dev_table.table_name
-                            AND column_name = dev_column.column_name
-                        GROUP BY data_type;
-                        IF prod_column_exists = 0 THEN -- COLUMN DOES NOT EXIST
-                            INSERT INTO temp_table_diff
-                            VALUES (dev_table.table_name,
-                                dev_column.column_name,
-                                dev_column.data_type);
-                        ELSIF prod_column_data_type != dev_column.data_type THEN
+                            AND column_name = dev_column.column_name;
+                        IF prod_column_data_type != dev_column.data_type THEN
                             -- COLUMN EXISTS, BUT WITH TYPE MISMATCH 
                             INSERT INTO temp_table_diff
                             VALUES (dev_table.table_name,
                                 dev_column.column_name,
                                 dev_column.data_type);
                         END IF;
+                    EXCEPTION
+                        WHEN NO_DATA_FOUND THEN
+                            INSERT INTO temp_table_diff
+                            VALUES (dev_table.table_name,
+                                dev_column.column_name,
+                                dev_column.data_type);
                     END;
+                    
                 END LOOP;
                 END;
             END IF;
